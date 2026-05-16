@@ -6,7 +6,8 @@ import pkg from "./package.json";
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  base: "/",
+  // base: "/",
+    base: '/vue3-manage-system/',  // 👈 加上这一行，路径是你的仓库名 为了让github pages能访问静态资源
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
   },
