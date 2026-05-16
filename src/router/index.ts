@@ -1,0 +1,22 @@
+import { createRouter, createWebHistory } from "vue-router";
+
+import { setupRouterGuards } from "./guards";
+import { staticRoutes, basicRoutes } from "./routes";
+
+const routes = [...staticRoutes, ...basicRoutes];
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: routes as unknown as readonly import("vue-router").RouteRecordRaw[],
+  scrollBehavior(_to, _from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return { top: 0 };
+    }
+  },
+});
+
+setupRouterGuards(router);
+
+export default router;
