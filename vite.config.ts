@@ -5,10 +5,12 @@ import { fileURLToPath, URL } from "node:url";
 import pkg from "./package.json";
 import tailwindcss from '@tailwindcss/vite'
 
-export default defineConfig({
-  base: "/",
-    // base: '/vue3-manage-system/',  // 👈 加上这一行，路径是你的仓库名 为了让github pages能访问静态资源
-  define: {
+export default defineConfig(({ command, mode }) => {
+    // 生产环境使用子路径，开发环境使用根路径
+  const base = mode === 'production' ? '/vue3-manage-system/' : '/';
+   return {
+    base,
+     define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
   },
   plugins: [
@@ -80,4 +82,12 @@ export default defineConfig({
       },
     },
   },
+  }
+
 });
+// export default defineConfig({
+//   // base: "/",
+//    base: mode === 'production' ? '/vue3-manage-system/' : '/';
+//     // base: '/vue3-manage-system/',  // 👈 加上这一行，路径是你的仓库名 为了让github pages能访问静态资源
+ 
+// });
