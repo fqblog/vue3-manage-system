@@ -1,5 +1,5 @@
 // src/api/user.ts
-import { http } from '@/utils/myRequest';
+import { http } from "@/utils/myRequest";
 
 export interface UserInfo {
   id: number;
@@ -21,35 +21,35 @@ export interface LoginResponse {
 }
 
 // 用户相关 API
-export const userApi = { 
+export const userApi = {
   // 登录
   login(loginData: LoginParams) {
-    return http.post<LoginResponse>('/api/manage/login', loginData);
+    return http.post<LoginResponse>("/api/manage/login", loginData);
   },
-  
+
   // 登出
   logout() {
-    return http.post('/logout');
+    return http.post("/logout");
   },
-  
+
   // 获取用户信息
   getUserInfo() {
-    return http.get<UserInfo>('/user/info');
+    return http.get<UserInfo>("/user/info");
   },
-  
+
   // 更新用户信息
   updateUserInfo(data: Partial<UserInfo>) {
-    return http.put('/user/info', data);
+    return http.put("/user/info", data);
   },
-  
+
   // 修改密码
   changePassword(oldPassword: string, newPassword: string) {
-    return http.post('/user/change-password', { oldPassword, newPassword });
+    return http.post("/user/change-password", { oldPassword, newPassword });
   },
-  
+
   // 上传头像
   uploadAvatar(file: File) {
-    return http.upload('/user/avatar', file);
+    return http.upload("/user/avatar", file);
   },
 };
 
