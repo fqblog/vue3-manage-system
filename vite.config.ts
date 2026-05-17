@@ -6,8 +6,8 @@ import pkg from "./package.json";
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  // base: "/",
-    base: '/vue3-manage-system/',  // 👈 加上这一行，路径是你的仓库名 为了让github pages能访问静态资源
+  base: "/",
+    // base: '/vue3-manage-system/',  // 👈 加上这一行，路径是你的仓库名 为了让github pages能访问静态资源
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
   },
@@ -37,7 +37,16 @@ export default defineConfig({
   server: {
     port: 3000,
     open: false,
-    proxy: {},
+    proxy: {
+        // 代理所有 /api 开头的请求
+        '/api': {
+          target: 'http://localhost:3001/',  // 后端地址
+          changeOrigin: true,  // 改变请求源
+          // rewrite: (path) => path.replace(/^\/api/, ''),  // 可选：去掉 /api 前缀
+          // 如果后端接口没有 /api 前缀，使用 rewrite
+          // 如果后端接口有 /api 前缀，则不需要 rewrite
+        },
+    },
   },
   build: {
     target: "es2020",

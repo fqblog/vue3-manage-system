@@ -10,6 +10,9 @@
     </div>
 
     <div class="login-box">
+      <div class="register-btn">
+        <a-button @click="goRegister" type="link">立即注册</a-button>
+      </div>
       <div class="login-header">
         <!-- Keep consistent with the in-app (top-left) logo style -->
         <div class="logo-wrap">
@@ -107,6 +110,7 @@ import LanguageSwitch from "@/components/Layout/LanguageSwitch.vue";
 import ThemeToggle from "@/components/Layout/ThemeToggle.vue";
 import { $t } from "@/locales";
 import { useAuthStore } from "@/stores/auth";
+import { userApi } from '@/api/login';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -136,9 +140,20 @@ const onCaptchaFail = () => {
 const handleSubmit = async () => {
   loading.value = true;
   try {
-    await authStore.login(formState.username, formState.password);
-    message.success($t("login.loginSuccess"));
-    router.push("/");
+
+    if (formState.username === 'user') {
+      await authStore.login(formState.username, formState.password);
+      message.success($t("login.loginSuccess"));
+      router.push("/");
+    } else {
+        const loginData = {
+          username: formState.username,
+          password: formState.password
+        }
+        const response = await userApi.login(loginData);
+        console.log('登录返回', response)
+    }
+
   } catch (error: unknown) {
     message.error(
       (error instanceof Error ? error.message : String(error)) ||
@@ -150,6 +165,33 @@ const handleSubmit = async () => {
     loading.value = false;
   }
 };
+
+const goRegister = () => {
+  router.push('/register')
+}
+
+// const handleLogin = async () => {
+//   loading.value = true;
+  
+//   try {
+//     const response = await userApi.login(formData);
+    
+//     if (response.success) {
+//       // 保存 token
+//       TokenManager.setToken(response.data.token);
+      
+//       message.success('登录成功');
+      
+//       // 跳转到重定向地址或首页
+//       const redirect = route.query.redirect as string;
+//       router.push(redirect || '/');
+//     }
+//   } catch (error) {
+//     console.error('登录失败:', error);
+//   } finally {
+//     loading.value = false;
+//   }
+// };
 </script>
 
 <style scoped lang="scss">
@@ -287,7 +329,10 @@ const handleSubmit = async () => {
       background var(--duration-slower) var(--ease-in-out),
       border-color var(--duration-slower) var(--ease-in-out),
       box-shadow var(--duration-slower) var(--ease-in-out);
-
+    .register-btn{
+      display: flex;
+      justify-content: flex-end;
+    }
     .login-header {
       text-align: center;
       margin-bottom: 24px;
